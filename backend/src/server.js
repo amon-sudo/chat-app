@@ -1,0 +1,33 @@
+import express from 'express'
+import dotenv from 'dotenv'
+import authRouters from './routes/auth.routes.js' 
+import messageRouters from './routes/messages.routes.js'
+import path from 'path'
+dotenv.config()
+
+const app = express()
+const __dirname = path.resolve()
+
+const PORT = process.env.PORT
+console.log(process.env.PORT)
+
+
+app.use('/api/auth', authRouters)
+app.use('/api/messages', messageRouters)
+
+
+// ready for deplayment
+
+if(process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, '../frontend/dist')))
+
+    app.get('*', (req, res)=> {
+        res.sendFile(path.join(__dirname, '../frontend','dist', 'index.html'))
+    })
+}
+
+
+
+app.listen(PORT, () => {
+    console.log(`server running on port ${PORT}`)
+})
