@@ -1,4 +1,5 @@
 import express from "express"
+import { signup } from "../controllers/auth.controllers.js"
 
 
 const router = express.Router()
@@ -11,9 +12,7 @@ const router = express.Router()
 
 
 
-router.get('/signup', (req, res) => {
-    res.send("signup")
-})
+router.post('/signup', signup)
 
 
 
