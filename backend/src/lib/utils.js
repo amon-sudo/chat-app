@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken'
 
 export const generateToken = (userId, res) => {
-    const token = jwt.sign({userId:userId}, process.env.JWT_KEY, {
+    const {JWT_KEY} = process.env
+    if(!JWT_KEY) throw new Error("no JWT KEY found")
+    const token = jwt.sign({userId:userId}, JWT_KEY, {
         expiresIn: "7d",
     })
     res.cookie("jwt", token, {
