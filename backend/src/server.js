@@ -4,13 +4,13 @@ import authRouters from './routes/auth.routes.js'
 import messageRouters from './routes/messages.routes.js'
 import path from 'path'
 import { connectDB } from './lib/db.js'
-dotenv.config()
+import { ENV } from './lib/env.js'
 
 const app = express()
 const __dirname = path.resolve()
 
-const PORT = process.env.PORT
-console.log(process.env.PORT)
+const PORT = ENV.PORT
+console.log(ENV.PORT)
 app.use(express.json()) //req.body
 
 
@@ -20,7 +20,7 @@ app.use('/api/messages', messageRouters)
 
 // ready for deplayment
 
-if(process.env.NODE_ENV === "production") {
+if(ENV.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
 
     app.get('*', (req, res)=> {
