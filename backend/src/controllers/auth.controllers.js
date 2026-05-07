@@ -64,6 +64,8 @@ export const login = async(req, res) => {
     const {email, password} = req.body
 
     try{
+        if (!email || !password) return res.status(400).json({ message: "Email and password are required" })
+
         const user = await User.findOne({email})
         if (!user) return res.status(400).json({message:"Invalid credentials"}) // never say what is missing, best practises
         const isPasswordCorrect = await bcrypt.compare(password, user.password)
