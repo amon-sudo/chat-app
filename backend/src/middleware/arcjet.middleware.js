@@ -30,6 +30,7 @@ export const arcjetProtection = async(req, res, next) => {
 
     } catch (error) {
         console.error("Arjetc middleware prob", error)
-        next()
+        
     }
+    next()
 }
