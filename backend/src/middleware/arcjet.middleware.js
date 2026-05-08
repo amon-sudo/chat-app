@@ -1,18 +1,16 @@
 
-
-import e from "express";
 import aj from "../lib/arcject.js";
 import { isSpoofedBot } from "@arcjet/inspect";
 
 export const arcjetProtection = async(req, res, next) => {
     try {
-        const decison = await aj.protect(req)
-        if (decison.isDenied()){
-            if (decison.reason.isRateLimit()){
+        const decision = await aj.protect(req)
+        if (decision.isDenied()){
+            if (decision.reason.isRateLimit()){
                 res.status(429).json({message:"Rate limit exceeded. please try agian later"})
             }
 
-         else if (decison.reason.isBot()){
+         else if (decision.reason.isBot()){
             return res.status(403).json({message:"Bot access is denied"})
         } else{
             return res.status(403).json({message:"Access deneid by security"})
@@ -20,7 +18,7 @@ export const arcjetProtection = async(req, res, next) => {
     }
 
     // spoofed bots
-    if (decison.results.some(isSpoofedBot)){
+    if (decision.results.some(isSpoofedBot)){
         return res.status(403).json({
             error:"spoofed boys detected",
             message:"Malicious bot atcivities"
@@ -30,7 +28,6 @@ export const arcjetProtection = async(req, res, next) => {
 
     } catch (error) {
         console.error("Arjetc middleware prob", error)
-        
+        return res.status(500).json({message:"Server failed"})
     }
-    next()
 }
