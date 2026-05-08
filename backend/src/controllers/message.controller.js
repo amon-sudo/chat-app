@@ -44,6 +44,17 @@ export const sendMessage = async(req, res) => {
         const {id:receiverId} = req.params
         const senderId = req.user._id
 
+               if (!text?.trim() && !image) {
+           return res.status(400).json({ message: "Message must contain text or image" })
+       }
+       if (!mongoose.isValidObjectId(receiverId)) {
+           return res.status(400).json({ message: "Invalid receiver id" })
+       }
+       if (receiverId === senderId.toString()) {
+           return res.status(400).json({ message: "Cannot send messages to yourself" })
+      }
+
+
         let imageUrl;
         if (image){
             //uploading the base64 image to cloudinary
@@ -87,7 +98,7 @@ export const getChatPatners = async (req, res) => {
              : msg.senderId.toString()))]
 
         const chatPartners = await User.find({_id: {$in: chatPartnerIds}}).select("-password")
-        res.status(200).json(chatPartnerIds)
+        res.status(200).json(chatPartners)
     } catch (error) {
         console.log("Error in the getChatPatner controller", error)
         res.status(500).json({error:"Server has failed"})
