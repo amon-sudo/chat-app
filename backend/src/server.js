@@ -17,7 +17,7 @@ app.use(cookieParser())
 
 
 app.use('/api/auth', authRouters)
-app.use('/api/messages', messageRouters)
+app.use('/api/message', messageRouters)
 
 
 // ready for deplayment
